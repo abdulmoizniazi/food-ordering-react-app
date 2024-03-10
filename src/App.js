@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
-import AddUser from './components/Users/AddUser';
-import UsersList from './components/Users/UsersList';
+import { useState } from 'react';
 
+import Header from './components/Layout/Header';
+import Meals from './components/Meals/Meals';
+import Cart from './components/Cart/Cart';
+import CartProvider from './store/CartProvider';
 
-const App = () => {
-  const [usersList, setUsersList] = useState([]);
-  const addUserHandler = (uName, uAge) => {
-    setUsersList((prevList) => {
-      return [...prevList, { name: uName, age: uAge, id: Math.random().toString() }];
-    });
-}
-  
+function App() {
+  const [cartIsShown, setCartIsShown] = useState(false);
+
+  const showCartHandler = () => {
+    setCartIsShown(true);
+  };
+
+  const hideCartHandler = () => {
+    setCartIsShown(false);
+  };
+
   return (
-    <div className="">
-      <AddUser onAddUser={ addUserHandler } />
-      <UsersList users={usersList} />
-    </div>
+    <CartProvider>
+      {cartIsShown && <Cart onClose={hideCartHandler} />}
+      <Header onShowCart={showCartHandler} />
+      <main>
+        <Meals />
+      </main>
+    </CartProvider>
   );
 }
 
